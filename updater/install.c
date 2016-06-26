@@ -1582,20 +1582,6 @@ Value* WipeBlockDeviceFn(const char* name, State* state, int argc, Expr* argv[])
     if (argc != 2) {
         return ErrorAbort(state, "%s() expects 2 args, got %d", name, argc);
     }
-
-    char* filename;
-    char* len_str;
-    if (ReadArgs(state, argv, 2, &filename, &len_str) < 0) return NULL;
-
-    size_t len = strtoull(len_str, NULL, 0);
-    int fd = open(filename, O_WRONLY, 0644);
-    int success = wipe_block_device(fd, len);
-
-    free(filename);
-    free(len_str);
-
-    close(fd);
-
     return StringValue(strdup(success ? "t" : ""));
 }
 
